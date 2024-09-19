@@ -1,6 +1,6 @@
-const { createLogger, transports, format } = require('winston');
+import { createLogger, transports, format } from 'winston';
 
-class Logger {
+export default class Logger {
   static logger = createLogger({
     level: 'info',
     format: format.combine(format.timestamp(), format.json()),
@@ -16,5 +16,3 @@ class Logger {
     next();
   }
 }
-
-module.exports = Logger;

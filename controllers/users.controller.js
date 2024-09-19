@@ -1,115 +1,86 @@
-const bcrypt = require("bcrypt");
-const ErrorResponse = require("../utils/errorResponse.js");
-const jwt = require("jsonwebtoken");
-const { sendPasswordEmail } = require("../utils/email");
-const User = require("../models/Users.js");
-
-/*
- * This is to request change if the user forgets their password
- *
- */
-exports.ForgetPasswordRequest = async (req, res, next) => {
-  const { email } = req.params;
-  const user = await User.findOne({ email: email }).select("+password");
-  if (!user) return next(new ErrorResponse("user does not exist", 401));
-  const secret = process.env.JWT_SECRET + user.password;
-  const payload = {
-    email: user.email,
-    id: user._id,
-  };
-  const token = jwt.sign(payload, secret, { expiresIn: "1h" }); // Set the expiration time as needed
-  const link = `${req.protocol}://${req.host}/reset-password/?token=${token}&user=${user._id}`;
-  sendPasswordEmail(link, email);
-  res.status(200).json({ status: true, message: "email sent" });
-};
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import ErrorResponse from '../utils/errorResponse.js';
+import { sendPasswordEmail } from '../utils/email.js';
+import UserService from '../services/user.service.js';
 
 /**
- * this is to update password after requesting
- *
+ * Request a password change if the user forgets their password
  */
-exports.ForgetPasswordUpdate = async (req, res, next) => {
-  const { new_password, token, user_Id } = req.body;
+export const forgetPasswordRequest = async (req, res, next) => {
+  const { email } = req.params;
+
   try {
-    const user = await User.findOne({ _id: user_Id }).select("+password");
-    if (!user) return next(new ErrorResponse("User doesnt exist", 401));
-    jwt.verify(
-      token,
-      process.env.JWT_SECRET + user.password,
-      async (err, decodedToken) => {
-        if (err) {
-          return next(new ErrorResponse("invalid token", 401));
-        } else {
-          const salt = await bcrypt.genSalt();
-          const hash = await bcrypt.hash(new_password, salt);
-          const user = await User.findOneAndUpdate(
-            { _id: decodedToken.id },
-            {
-              $set: { password: hash },
-            },
-            { new: true }
-          );
-          // Handle success case
-          if (user) return res.status(200).json({ status: true, data: user });
-        }
-      }
-    );
+    const user = await UserService.findUserByEmail(email);
+    if (!user) return next(new ErrorResponse('User does not exist', 401));
+
+    const secret = process.env.JWT_SECRET + user.password;
+    const payload = { email: user.email, id: user._id };
+    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+    const link = `${req.protocol}://${req.get('host')}/reset-password/?token=${token}&user=${user._id}`;
+
+    sendPasswordEmail(link, email);
+    res.status(200).json({ status: true, message: 'Email sent' });
   } catch (error) {
-    // Handle error case
     next(error);
   }
 };
 
 /**
- * this is to update the user password
- *
+ * Update password after requesting
  */
-exports.UpdatePassword = async (req, res, next) => {
+export const forgetPasswordUpdate = async (req, res, next) => {
+  const { new_password, token, user_Id } = req.body;
+
+  try {
+    const user = await UserService.findUserById(user_Id);
+    if (!user) return next(new ErrorResponse('User doesn\'t exist', 401));
+
+    jwt.verify(token, process.env.JWT_SECRET + user.password, async (err, decodedToken) => {
+      if (err) return next(new ErrorResponse('Invalid token', 401));
+
+      const salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(new_password, salt);
+      const updatedUser = await UserService.updateUserPassword(decodedToken.id, hash);
+
+      res.status(200).json({ status: true, data: updatedUser });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Update user password
+ */
+export const updatePassword = async (req, res, next) => {
   const { old_password, new_password } = req.body;
 
   try {
-    const checkUser = await User.findById({ _id: req.user._id }).select(
-      "+password"
-    );
-    if (!checkUser) return next(new ErrorResponse("No user found", 401));
-    // compare passwords
-    const comparepass = await bcrypt.compare(old_password, checkUser.password);
-    if (!comparepass)
-      return next(new ErrorResponse("Old password doesnt match", 401));
+    const user = await UserService.findUserById(req.user._id);
+    if (!user) return next(new ErrorResponse('No user found', 401));
+
+    const isMatch = await bcrypt.compare(old_password, user.password);
+    if (!isMatch) return next(new ErrorResponse('Old password doesn\'t match', 401));
 
     const salt = await bcrypt.genSalt();
-    const hashedpassword = await bcrypt.hash(new_password, salt);
-    const updatePassword = await User.findOneAndUpdate(
-      { _id: req.user._id },
-      {
-        $set: { password: hashedpassword },
-      },
-      { new: true }
-    );
+    const hashedPassword = await bcrypt.hash(new_password, salt);
+    const updatedUser = await UserService.updateUserPassword(req.user._id, hashedPassword);
 
-    if (updatePassword)
-      res.status(200).json({
-        status: true,
-        data: updatePassword,
-        message: "Password updated",
-      });
+    res.status(200).json({ status: true, data: updatedUser, message: 'Password updated' });
   } catch (error) {
     next(error);
   }
 };
 
 /**
- * Get User Profile
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * Get user profile
  */
-exports.GetProfile = async (req, res, next) => {
+export const getProfile = async (req, res, next) => {
   try {
-    console.log("hiiiiiiiiiiii aah");
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      return next(new ErrorResponse(`user not found.`, 401));
-    }
+    const user = await UserService.findUserById(req.user._id);
+    if (!user) return next(new ErrorResponse('User not found', 401));
+
     res.status(200).json({ status: true, data: user });
   } catch (error) {
     next(error);
@@ -117,35 +88,15 @@ exports.GetProfile = async (req, res, next) => {
 };
 
 /**
- * this route is to update user profile
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * Update user profile
  */
-exports.updateProfile = async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  if (!user) {
-    return next(new ErrorResponse(`user not found.`, 401));
-  }
-
-  var objForUpdate = {};
-
-  if (req.body.email) objForUpdate.email = req.body.email;
-  if (req.body.username) objForUpdate.username = req.body.username;
-  if (req.body.location) objForUpdate.location = req.body.location;
-  if (req.body.phone_number) objForUpdate.phone_number = req.body.phone_number;
+export const updateProfile = async (req, res, next) => {
+  const updates = { ...req.body };
 
   try {
-    const updateduser = await User.findOneAndUpdate(
-      { _id: req.user._id },
-      { $set: objForUpdate },
-      { new: true }
-    );
-
-    res
-      .status(200)
-      .json({ status: true, data: updateduser, message: "Profile updated" });
-  } catch {
+    const updatedUser = await UserService.updateUserProfile(req.user._id, updates);
+    res.status(200).json({ status: true, data: updatedUser, message: 'Profile updated' });
+  } catch (error) {
     next(error);
   }
 };

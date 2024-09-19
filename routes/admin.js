@@ -1,6 +1,7 @@
-const { requireAuthAdmin } = require("../middlewares/authMiddleware");
-const express = require("express");
+import express from "express";
 
 const router = express.Router();
 
-module.exports = router;
+// Define admin routes here
+
+export default router;

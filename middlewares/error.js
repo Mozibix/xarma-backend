@@ -1,4 +1,4 @@
-const errorResponse = require("../utils/errorResponse");
+import ErrorResponse from '../utils/errorResponse.js'
 
 const ErrorHandler = (err, req, res, next) => {
   let error = err;
@@ -7,29 +7,29 @@ const ErrorHandler = (err, req, res, next) => {
   // Duplicate error
   if (err.code === 11000) {
     const message = "Already registered";
-    error = new errorResponse(message, 404);
+    error = new ErrorResponse(message, 404);
   }
 
   // mongo bad Object error
   if (err.name === "CastError") {
     const message = `invalid id`;
-    error = new errorResponse(message, 404);
+    error = new ErrorResponse(message, 404);
   }
 
   if (err instanceof ReferenceError) {
     const errorMessage = err.message;
-    error = new errorResponse(errorMessage, 404); // You can choose an appropriate status code
+    error = new ErrorResponse(errorMessage, 404); // You can choose an appropriate status code
   }
 
   if (err instanceof TypeError) {
     const errorMessage = err.message;
-    error = new errorResponse(errorMessage, 404); // You can choose an appropriate status code
+    error = new ErrorResponse(errorMessage, 404); // You can choose an appropriate status code
   }
 
   // Mongo validation error
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((val) => val.message);
-    error = new errorResponse(message, 404);
+    error = new ErrorResponse(message, 404);
   }
 
   // Validation errors
@@ -42,7 +42,7 @@ const ErrorHandler = (err, req, res, next) => {
     });
 
     const errorMessage = Object.values(getErrMessage).join(", ");
-    error = new errorResponse(errorMessage, 404);
+    error = new ErrorResponse(errorMessage, 404);
   }
 
   // Handle other general errors
@@ -51,4 +51,4 @@ const ErrorHandler = (err, req, res, next) => {
   res.status(statusCode).json({ status: false, message: message });
 };
 
-module.exports = { ErrorHandler };
+export default ErrorHandler;
