@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -7,7 +7,7 @@ const maxAge = 3 * 24 * 60 * 60;
 // const key2 = Buffer.from(process.env.KEY_TWO, "hex");
 // const key3 = Buffer.from(process.env.KEY_THREE, "hex");
 
-const createToken = (id) => {
+export const createToken = (id) => {
   const jwtToken = jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: maxAge,
   });
@@ -22,7 +22,7 @@ const createToken = (id) => {
   return jwtToken;
 };
 
-function generateRandomAlphaNumeric(length) {
+export function generateRandomAlphaNumeric(length) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
@@ -32,5 +32,3 @@ function generateRandomAlphaNumeric(length) {
   }
   return result.toUpperCase();
 }
-
-module.exports = { createToken, generateRandomAlphaNumeric };
