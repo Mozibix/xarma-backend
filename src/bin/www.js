@@ -18,10 +18,14 @@ app.listen(port, () => {
   console.log(`App is Listening on http://${hostname}:${port}`);
 });
 
-process.on('SIGINT', () => {
-  mongoose.connection.close(() => {
+process.on('SIGINT', async () => {
+  try {
+    await mongoose.connection.close();
     console.log('Shutting down server...');
     console.log('Server successfully shutdown');
     process.exit(0);
-  });
+  } catch (err) {
+    console.error('Error during shutdown:', err);
+    process.exit(1);
+  }
 });
