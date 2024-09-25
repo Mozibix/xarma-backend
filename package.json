@@ -1,26 +1,40 @@
 {
-  "name": "saturn.js",
+  "name": "x-arme",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "babel-node server.js"
+    "start": "npm run build && node dist/bin/www.js",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "build": "babel src -d dist",
+    "dev": "nodemon --watch src --delay 250ms --exec babel-node src/bin/www.js --ignore tests/"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-dynamic-import-node": "^2.3.3",
     "body-parser": "^1.20.3",
     "cloudinary": "^2.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-basic-auth": "^1.2.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.8.1",
+    "mongoose": "^8.6.3",
+    "mongoose-paginate": "^5.0.3",
+    "mongoose-unique-validator": "^5.0.1",
+    "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
+    "shortid": "^2.2.16",
     "socket.io": "^4.7.2",
     "streamifier": "^0.1.1",
     "swagger-jsdoc": "^6.2.8",
@@ -28,9 +42,14 @@
     "twilio": "^4.10.0",
     "uuid": "^9.0.1",
     "validator": "^13.11.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "winston-sentry-log": "^1.0.26",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "nodemon": "^3.1.4"
   }
 }
