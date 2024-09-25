@@ -5,7 +5,7 @@ const router = Router();
 // Base route for API
 router.get('/v1', (req, res) => {
   res.status(200).json({
-    message: 'Welcome to API'
+    message: 'Welcome to  X-ARME API'
   });
 });
 
