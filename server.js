@@ -1,44 +1,55 @@
-import dotenv from 'dotenv';
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import xss from 'xss-clean';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
 
-import userRoutes from './routes/user.js';
-import adminRoutes from './routes/admin.js';
-import authRoutes from './routes/auth.js';
-import ErrorHandler from './middlewares/error.js';
-import Logger from './middlewares/log.js';
-
-dotenv.config();
+import routes from './src/routes/index.js';
+import Logger from './src/middlewares/log.js';
 
 const app = express();
 
-// Middleware
+app.use(express.static('public'));
+app.set('trust proxy', 1);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+app.use(cookieParser());
 app.use(Logger.logRequest);
-// Routes
-app.use(`${process.env.Endpoint}/auth`, authRoutes);
-app.use(`${process.env.Endpoint}/user`, userRoutes);
-app.use(`${process.env.Endpoint}/admin`, adminRoutes);
+app.use(bodyParser.text());
+app.use(bodyParser.json());
+app.use(express.json({ limit: '10000000kb' })); // Preventing DOS Attacks
+// Data sanitization against NoSQL Injection Attacks
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(xss());
+app.use(logger('dev'));
 
-// Error handler
-app.use(ErrorHandler);
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  dbName: "Xarme",
-})
-  .then(() => console.log("Database Connection is ready..."))
-  .catch(err => console.error(err));
-
-// Start server
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`App is Listening http://localhost:${PORT}${process.env.Endpoint}`);
+// Rate Limiting
+const limit = rateLimit({
+  max: 1000000000, // max requests
+  windowMs: 60 * 60 * 1000, // 1 Hour of 'ban' / lockout 0
+  message: 'Too many requests' // message to send
 });
+// ROUTES
+// Mount the routes with the base URL
+app.use('/', limit);  // Apply the rate limiting globally
+
+// Mount API routes
+app.use(routes);
+
+app.use('*', (req, res, next) => {
+  res.status(404).json({
+    error: 'Invalid route'
+  });
+  next();
+});
+
+export default app;
