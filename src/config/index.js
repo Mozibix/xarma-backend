@@ -12,6 +12,7 @@ const config = {
     MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/xarme-test',
     NODE_ENV: process.env.NODE_ENV || 'development',
     Endpoint: process.env.Endpoint || '/v1',
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN
 };
 
 export default config;
