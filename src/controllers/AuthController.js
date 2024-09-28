@@ -1,6 +1,6 @@
-import { verifyTelegramRequest } from "../utils/telegram";
+import { verifyTelegramRequest } from "../utils/telegram.js";
 import UserService from '../services/userService.js';
-import { generateRandomAlphaNumeric, createToken } from "../utils/createTokens"
+import { generateRandomAlphaNumeric, createToken } from "../utils/createTokens.js"
 import gemaService from "../services/gemaService.js";
 import xeetService from "../services/xeetService.js";
 import { randomUUID } from "crypto";
@@ -15,7 +15,7 @@ class AuthController {
      */
     static async authenticateUser(req, res) {
         try {
-            const queryParams = req.query;
+        const queryParams = req.query;
             const verify = await verifyTelegramRequest(queryParams);
             if (!verify) {
                 return res.status(403).json({
