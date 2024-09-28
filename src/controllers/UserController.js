@@ -30,6 +30,30 @@ class UserController {
       });
     }
   }
+
+  /**
+   * @description get a user by userId
+   * @param  {object} req
+   * @param {object} res
+   * @returns {object} a json object
+   * @memberof UserController
+   */
+  static async getUserCardDetails(req, res) {
+    try {
+      const userId = req.query.userId; // Depends on frontend
+      const cardDettails = await UserService.getUserCardDetails(userId);
+      return res.status(200).json({
+        message: 'Successfully retrieved',
+        data: cardDettails
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        errorCode: 121,
+        data: error.message,
+      });
+    }
+  }
 }
 
 export default UserController
