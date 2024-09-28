@@ -20,7 +20,7 @@ export default class UserService {
       const {
         tgId
       } = option;
-      const user = await userRepository.findByField('tgId', tgId);
+      const user = userRepository.findByField('tgId', tgId);
       if (!user) throw new Error('This user does not exist');
       return userObject;
     } catch (error) {
@@ -28,7 +28,6 @@ export default class UserService {
       throw error;
     }
   }
-
   /**
    * @description Get user card details by userId
    * @param {string} userId 
@@ -45,4 +44,13 @@ export default class UserService {
     }
   }
 
+  static async create(options) {
+    try {
+      const user = userRepository.create(options);
+      return user;
+    } catch (error) {
+      logger.error(error.data);
+      throw error;
+    }
+  }
 }
