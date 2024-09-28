@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 /**
  * @description BaseRepository
  * @class BaseRepository
@@ -114,6 +116,51 @@ class BaseRepository {
                 { $set: { [field]: value } },
                 { new: true });
             return document;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * @description Fetch documents based on a field and value
+     * @param {string} field
+     * @param {any} value 
+     * @returns {Promise<Array>} - Array of documents
+     */
+       async findByFieldAll(field, value) {
+        try {
+            const documents = await this.model.find({ [field]: value }).exec();
+            return documents;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * @description Fetch user card details (gemaScore, xHandle, walletAddress, walletUserName, rank, refillSpeed)
+     * @param {string} userId 
+     * @param {Array} lookups 
+     * @param {Object} projection 
+     * @returns {Object} User card details
+     */
+    async aggregationQueryByUserId(field, value, lookups = [], projection = {}) {
+        try {
+            // Create the initial aggregation pipeline with $match
+            const pipeline = [
+                {
+                    // $match: { _id: new mongoose.Types.ObjectId(userId) }
+                    $match: { [field]: value }
+
+                },
+                ...lookups,  // passed from specific repositories
+                {
+                    $project: projection //passed from specific repositories
+                }
+            ];
+
+            // Perform the aggregation
+            const result = await this.model.aggregate(pipeline);
+            return result.length ? result[0] : null;
         } catch (error) {
             throw error;
         }

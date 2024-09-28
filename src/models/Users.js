@@ -4,7 +4,7 @@ import userRanks from '../enums/userRanks.js';
 
 const UserSchema = new Schema({
   userId: {
-    type: String, required: true, index: true, nique: true
+    type: String, required: true, index: true, unique: true
   },
   tgId: { type: String, required: true, unique: true, sparse: true, index: true },
   username: { type: String, required: true },

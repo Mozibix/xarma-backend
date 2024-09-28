@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import getUser from './user.js';
+import userRoutes from './user.js';
+import transactionRoutes from './transactions.js';
 
 const router = Router();
 
@@ -10,7 +11,9 @@ router.get('/v1', (req, res) => {
     });
 });
 
-// Mount user routes under /v1/user
-router.use('/v1', getUser);
+// Mount user routes under user
+router.use('/v1', userRoutes);
+// Mount transaction routes under transactions
+router.use('/v1', transactionRoutes);
 
 export default router;
