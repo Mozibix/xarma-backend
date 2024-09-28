@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/Users';
-import { response } from '../utils/response';
+import User from '../models/Users.js';
+import response from '../utils/response.js';
 
 /**
  * @param {object} req - Request object
@@ -40,4 +40,4 @@ export const hasAuth = async (req, res, next) => {
     }
 };
 
-export default authenticate;
+export default hasAuth;
