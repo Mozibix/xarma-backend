@@ -6,7 +6,7 @@ import authRoutes from './auth.js'
 const router = Router();
 
 // Base route for API
-router.get('/test', (req, res) => {
+router.get('/ping', (req, res) => {
     res.status(200).json({
         message: 'Welcome to  X-ARME API'
     });
