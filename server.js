@@ -43,7 +43,7 @@ const limit = rateLimit({
 app.use('/', limit);  // Apply the rate limiting globally
 
 // Mount API routes
-app.use(routes);
+app.use('/api', routes);
 
 app.use('*', (req, res, next) => {
   res.status(404).json({
@@ -51,5 +51,12 @@ app.use('*', (req, res, next) => {
   });
   next();
 });
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).send({
+      status: false,
+      message: err.message
+  });
+  next();
+}); 
 
 export default app;

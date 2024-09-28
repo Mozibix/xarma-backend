@@ -1,33 +1,50 @@
-import UserService from '../services/userService.js';
+import response from "../utils/response.js";
+import { userDetail } from "../utils/apiFilter.js";
+import gemaService from "../services/gemaService.js";
+import xeetService from "../services/xeetService.js";
 
 /**
  * @description UserController
  */
 class UserController {
   /**
-     * @description get a user
+     * @description get a user details
      * @param  {object} req
      * @param {object} res
      * @returns {object} a json object
      * @memberof UserController
      */
-  static async getUser(req, res) {
+  static async getUserDetails(req, res) {
     try {
-      const userDetails = req.authData; // depends on what it is called in the client
-      const option = {
-        tgId: userDetails.sub,
-      };
-      const user = await UserService.getAUser(option);
-      return res.status(200).json({
-        message: 'Successfully retrieved',
-        data: user
-      });
+      const user = req.user;
+      const filterUserData = _.pick(user.toObject(), userDetail());
+      return response(res, 200, { status: true, message: "User details retrieved successfully", data: filterUserData });
     } catch (error) {
-      return res.status(400).json({
-        success: false,
-        errorCode: 121,
-        data: error.message,
-      });
+      return response(res, 500, { 
+        status: false,
+        message: "A server error occured"
+      })
+    }
+  }
+
+  static async getUserScores(req, res) {
+    try {
+      const user = req.user;
+      let gemaScore = await gemaService.getGemaScore(user._id);
+      let xeetScore = await xeetService.getXeetScore(user._id);
+      const scores = {
+        'gema': gemaScore.gemaScore,
+        'xeet': {
+          'score': xeetScore.xeetScore,
+          'numberOfImpressionPerAccount': xeetScore.numberOfImpressionPerAccount
+        }
+      }
+      return response(res, 200, { status: true, message: "User Scores Retrieved Successfully", data: scores });
+    } catch (error) {
+      return response(res, 500, { 
+        status: false,
+        message: "A server error occured"
+      })
     }
   }
 

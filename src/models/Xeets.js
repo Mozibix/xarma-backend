@@ -11,7 +11,8 @@ const XeetSchema = new Schema({
    numberOfImpressionPerAccount: {
     type: Number,
     default: 0,
-   },
+   }
+}, {
   timestamps: {
     created_At: 'created_At', updated_At: 'updated_At'
   }
