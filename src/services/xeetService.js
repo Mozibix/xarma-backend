@@ -1,4 +1,4 @@
-import XeetRepository from "../repositories/xeetRepository";
+import XeetRepository from "../repositories/xeetRepository.js";
 
 const xeetRepository = new XeetRepository();
 /**
