@@ -5,3 +5,5 @@ npm-debug.log
 logs
 /dist
 xarme.zip
+start.sh
+deploy.sh
