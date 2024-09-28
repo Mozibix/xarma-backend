@@ -1,4 +1,4 @@
-import GemaRepository from "../repositories/gemaRepository";
+import GemaRepository from "../repositories/gemaRepository.js";
 
 const gemaRepository = new GemaRepository();
 /**
