@@ -1,20 +1,28 @@
-import Mongoose, { Schema } from 'mongoose';
+import Mongoose, { Schema } from "mongoose";
 
-const DailyGemaClaimSchema = new Schema({
+const DailyGemaClaimSchema = new Schema(
+  {
     userId: {
-        type: Schema.Types.ObjectId, ref: 'Users', unique: true, required: true
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      unique: true,
+      required: true,
     },
     dailyStreak: {
-        type: Number
+      type: Number,
     },
     PreviousStreakCollected: {
-        type: Boolean
+      type: Boolean,
     },
+  },
+  {
     timestamps: {
-        created_At: 'created_At', updated_At: 'updated_At'
-    }
-})
+      created_At: "created_At",
+      updated_At: "updated_At",
+    },
+  }
+);
 
-const DailyGemaClaim = Mongoose.model('DailyGemaClaim', DailyGemaClaimSchema)
+const DailyGemaClaim = Mongoose.model("DailyGemaClaim", DailyGemaClaimSchema);
 
 export default DailyGemaClaim;
