@@ -22,8 +22,7 @@ class AuthController {
   static async authenticateUser(req, res) {
     try {
       const queryParams = req.query;
-      // const verify = await verifyTelegramRequest(queryParams);
-      const verify = true;
+      const verify = await verifyTelegramRequest(queryParams);
       if (!verify) {
         return res.status(403).json({
           status: false,
