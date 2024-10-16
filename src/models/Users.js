@@ -33,6 +33,7 @@ const UserSchema = new Schema(
     twitterDetails: { type: Object, required: false },
     inviteCode: { type: String, required: true, unique: true },
     avatar: { type: String, required: false },
+    isPensionActive: {type: Boolean, default: false}
   },
   { timestamps: { created_At: "created_At", updated_At: "updated_At" } }
 );

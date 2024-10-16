@@ -11,6 +11,21 @@ import cookieParser from "cookie-parser";
 import routes from "./src/routes/index.js";
 import Logger from "./src/middlewares/log.js";
 
+import cron from 'node-cron';
+import PensionService from './src/services/PensionService.js';
+
+// Schedule a cron job to run daily at midnight (00:00) to deduct 1 Gema for pension fund
+cron.schedule('0 0 * * *', async () => {
+  try {
+    await PensionService.autoPensionContribution();
+    console.log('Daily pension contributions processed successfully.');
+  } catch (error) {
+    console.error('Error in processing daily pension contributions:', error.message);
+  }
+});
+
+
+
 const app = express();
 
 app.use(express.static("public"));
