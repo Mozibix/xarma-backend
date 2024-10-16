@@ -2,6 +2,7 @@ import response from "../utils/response.js";
 import { userDetail } from "../utils/apiFilter.js";
 import gemaService from "../services/gemaService.js";
 import xeetService from "../services/xeetService.js";
+import rankService from "../services/rankService.js";
 
 /**
  * @description UserController
@@ -69,6 +70,35 @@ class UserController {
         errorCode: 121,
         data: error.message,
       });
+    }
+  }
+  // 
+
+
+    /**
+   * @description get a user rank by userId
+   * @param  {object} req
+   * @param {object} res
+   * @returns {object} a json object
+   * @memberof UserController
+   */
+  static async getUserRankColor(req,res){
+    try {
+      const user = req.user;
+      let rankColor = await rankService.getRankColor(user._id);
+      
+      const rcolors = {
+        "color": rankColor
+      }
+
+      res.status(200).json({ status: true, message: "User Rank Color Retrieved Successfully", data: rcolors })
+    } catch (error) {
+      return res.status(400).json({
+        success:false,
+        errorCode:121,
+        data: error.message
+
+      })
     }
   }
 }
