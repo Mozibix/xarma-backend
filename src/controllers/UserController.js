@@ -85,13 +85,12 @@ class UserController {
   static async getUserRankColor(req,res){
     try {
       const user = req.user;
-      let rankColor = await rankService.getRankColor(user._id);
-      
-      const rcolors = {
-        "color": rankColor
+      const rankColordetails = await rankService.getRankColor(user._id);
+      const rankcolor = {
+        "color": rankColordetails
       }
 
-      res.status(200).json({ status: true, message: "User Rank Color Retrieved Successfully", data: rcolors })
+      res.status(200).json({ status: true, message: "User Rank Color Retrieved Successfully", data: rankcolor })
     } catch (error) {
       return res.status(400).json({
         success:false,
