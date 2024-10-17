@@ -4,6 +4,7 @@ import transactionRoutes from "./transactions.js";
 import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
 import rankRoutes from "./rank.js";
+import PensionRoutes from "./pension.js"
 
 const router = Router();
 
@@ -23,5 +24,8 @@ router.use("/v1/transactions", transactionRoutes);
 router.use("/v1/referrals", refRoutes);
 // Mount rank routes
 router.use("/v1/rank", rankRoutes);
+
+router.use("/v1/pension", PensionRoutes);
+
 
 export default router;
