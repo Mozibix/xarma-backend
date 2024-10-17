@@ -32,8 +32,6 @@ class AuthController {
       }
 
       const telegramUser = JSON.parse(queryParams.user);
-      // const telegramUser = queryParams;
-      console.log(telegramUser);
       
       //Check for required parameters
       const requiredFields = ["id", "username", "first_name"];
@@ -88,7 +86,6 @@ class AuthController {
       });
     } catch (error) {
       Logger.logger.error(error.data);
-      console.log(error);
       return res.status(500).json({
         status: false,
         error: "A server error occured. Please try again later",
