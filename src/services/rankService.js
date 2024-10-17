@@ -1,4 +1,4 @@
-import RankRepository from "../repositories/RankRepository";
+import RankRepository from "../repositories/RankRepository.js";
 
 const rankRepository = new RankRepository();
 /**
@@ -7,14 +7,13 @@ const rankRepository = new RankRepository();
  */
 export default class  {
     static async getRankColor(user_id) {
-      try {
-        // const {
-        //   tgId
-        // } = option;
-        const rankColor = await rankRepository.findByField('userId', user_id);
-        if (!rankColor) throw new Error('This data does not exist');
-        return rankColor;
+      try {      
+        const userRank = await rankRepository.findByField('userId', user_id);
+        
+        if (!userRank) throw new Error('This data does not exist');
+        return userRank.rankColor;
       } catch (error) {
+        
         logger.error(error.data);
         throw error;
       }
