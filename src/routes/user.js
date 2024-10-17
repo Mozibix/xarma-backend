@@ -11,5 +11,5 @@ router.get("/card-details", hasAuth, UserController.getUserCardDetails);
 router.get('/details', hasAuth, UserController.getUserDetails);
 router.get('/scores', hasAuth, UserController.getUserScores);
 
-router.get('/user-theme', hasAuth, UserController.getUserRankColor)
+router.get('/rank-color', hasAuth, UserController.getUserRankColor)
 export default router;
