@@ -14,7 +14,6 @@ const rewardCalc = (
   xeetScore *= multiplier;
   gamaScore *= multiplier;
 
-
   return { xeetScore, gamaScore };
 };
 
