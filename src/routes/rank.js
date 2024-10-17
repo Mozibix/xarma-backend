@@ -7,5 +7,5 @@ const router = Router();
 // Destructure the controller
 
 // Define rank-related routes
-router.get('/rank-color', hasAuth, RankController.getUserRankColor)
+router.get('/color', hasAuth, RankController.getUserRankColor)
 export default router;
