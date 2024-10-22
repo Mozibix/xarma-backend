@@ -13,11 +13,14 @@ import Logger from "./src/middlewares/log.js";
 
 import cron from 'node-cron';
 import PensionService from './src/services/PensionService.js';
+import AnalyticService from "./src/services/AnalyticService.js";
 
 // Schedule a cron job to run daily at midnight (00:00) to deduct 1 Gema for pension fund
 cron.schedule('0 0 * * *', async () => {
   try {
     await PensionService.autoPensionContribution();
+    await AnalyticService.deleteOldAnalyticsHistory();
+    await AnalyticService.resetDailyAnalytics();
     console.log('Daily pension contributions processed successfully.');
   } catch (error) {
     console.error('Error in processing daily pension contributions:', error.message);
