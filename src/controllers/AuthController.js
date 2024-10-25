@@ -9,6 +9,7 @@ import xeetService from "../services/xeetService.js";
 import { randomUUID } from "crypto";
 import referralService from "../services/referralService.js";
 import Logger from "../middlewares/log.js";
+import dailyClaimsService from "../services/dailyClaimsService.js";
 // import { log } from "console";
 
 class AuthController {
@@ -56,6 +57,7 @@ class AuthController {
         user = await UserService.create(userData);
         await gemaService.create(user._id);
         await xeetService.create(user._id);
+        await dailyClaimsService.create(user._id);
 
         //check if invite code was sent in query
         if (telegramUser.inviteCode) {
