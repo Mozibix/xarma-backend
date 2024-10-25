@@ -145,6 +145,25 @@ class BaseRepository {
   }
 
   /**
+   * @description reset a  value, serves e.t.c
+   * @param {string} userId
+   * @param {number} value By the amount to reset the value to 0 or any value
+   * @returns {Document} Updated document
+   */
+  async reset(userId, field, value) {
+    try {
+      const document = await this.model.findOneAndUpdate(
+        { userId },
+        { $set: { [field]: value? value: 0 } },
+        { new: true }
+      );
+      return document;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * @description Fetch documents based on a field and value
    * @param {string} field
    * @param {any} value
