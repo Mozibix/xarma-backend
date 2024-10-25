@@ -4,6 +4,7 @@ import transactionRoutes from "./transactions.js";
 import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
 import PensionRoutes from "./pension.js"
+import DailyClaimsRoutes from "./dailyClaims.js"
 
 const router = Router();
 
@@ -23,6 +24,9 @@ router.use("/v1/transactions", transactionRoutes);
 router.use("/v1/referrals", refRoutes);
 
 router.use("/v1/pension", PensionRoutes);
+
+// mount daily claims routes
+router.use("/v1/daily", DailyClaimsRoutes);
 
 
 export default router;
