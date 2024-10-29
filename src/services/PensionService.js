@@ -1,6 +1,6 @@
 import PensionAccountRepository from "../repositories/PensionRepository.js";
 import UserRepository from "../repositories/UserRepository.js";
-import GemaRepository from "../repositories/GemaRepository.js";
+import GemaRepository from "../repositories/gemaRepository.js";
 import Logger from "../middlewares/log.js";
 import AnalyticService from "./AnalyticService.js";
 
