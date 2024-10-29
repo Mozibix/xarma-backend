@@ -2,6 +2,7 @@ import response from "../utils/response.js";
 import { userDetail } from "../utils/apiFilter.js";
 import gemaService from "../services/gemaService.js";
 import xeetService from "../services/xeetService.js";
+import rankService from "../services/rankService.js";
 
 /**
  * @description UserController
@@ -71,6 +72,9 @@ class UserController {
       });
     }
   }
+  // 
+
+
 }
 
 export default UserController

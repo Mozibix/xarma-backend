@@ -11,6 +11,7 @@ import referralService from "../services/referralService.js";
 import Logger from "../middlewares/log.js";
 import dailyClaimsService from "../services/dailyClaimsService.js";
 // import { log } from "console";
+import rankService from "../services/rankService.js";
 
 class AuthController {
   /**
@@ -23,6 +24,7 @@ class AuthController {
   static async authenticateUser(req, res) {
     try {
       const queryParams = req.query;
+      
       const verify = await verifyTelegramRequest(queryParams);
       if (!verify) {
         return res.status(403).json({
@@ -32,6 +34,7 @@ class AuthController {
       }
 
       const telegramUser = JSON.parse(queryParams.user);
+      
       //Check for required parameters
       const requiredFields = ["id", "username", "first_name"];
 
@@ -58,6 +61,7 @@ class AuthController {
         await gemaService.create(user._id);
         await xeetService.create(user._id);
         await dailyClaimsService.create(user._id);
+        await rankService.create(user._id); // needed to be able to asign a rank to user
 
         //check if invite code was sent in query
         if (telegramUser.inviteCode) {
@@ -84,7 +88,6 @@ class AuthController {
       });
     } catch (error) {
       Logger.logger.error(error.data);
-      console.log(error);
       return res.status(500).json({
         status: false,
         error: "A server error occured. Please try again later",
@@ -94,3 +97,4 @@ class AuthController {
 }
 
 export default AuthController;
+
