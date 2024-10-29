@@ -5,6 +5,7 @@ import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
 import rankRoutes from "./rank.js";
 import PensionRoutes from "./pension.js"
+import AnalyticRoutes from "./analytic.js";
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use("/v1/referrals", refRoutes);
 router.use("/v1/rank", rankRoutes);
 
 router.use("/v1/pension", PensionRoutes);
+router.use("/v1/analytic", AnalyticRoutes);
 
 
 export default router;
