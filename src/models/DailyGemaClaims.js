@@ -10,9 +10,15 @@ const DailyGemaClaimSchema = new Schema(
     },
     dailyStreak: {
       type: Number,
+      dafault:0,
     },
     PreviousStreakCollected: {
       type: Boolean,
+      default: false,
+    },
+    PreviousCollectedTime: {
+      type: Date,
+      default: Date.now
     },
   },
   {

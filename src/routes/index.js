@@ -5,6 +5,7 @@ import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
 import rankRoutes from "./rank.js";
 import PensionRoutes from "./pension.js"
+import DailyClaimsRoutes from "./dailyClaims.js"
 import AnalyticRoutes from "./analytic.js";
 
 const router = Router();
@@ -28,6 +29,9 @@ router.use("/v1/rank", rankRoutes);
 
 router.use("/v1/pension", PensionRoutes);
 router.use("/v1/analytic", AnalyticRoutes);
+
+// mount daily claims routes
+router.use("/v1/daily", DailyClaimsRoutes);
 
 
 export default router;
