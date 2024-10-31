@@ -6,18 +6,17 @@ import mongoose from "mongoose";
  */
 class BaseRepository {
   /**
-   * @description create a new document
-   * @param {model} model
-   * @returns {document} returns a newly created document
+   * @description Initializes the repository with a specific model
+   * @param {Model} model - Mongoose model to interact with the database
    */
   constructor(model) {
     this.model = model;
   }
 
   /**
-   * @description create a new document
-   * @param {option} options
-   * @returns {document} returns a newly created document
+   * @description Create a new document
+   * @param {Object} options - Fields to include in the new document
+   * @returns {Document} Newly created document
    */
   async create(options) {
     try {
@@ -29,43 +28,14 @@ class BaseRepository {
   }
 
   /**
-   * @description Fetch documents by field
-   * @param {string} field
-   * @param {any} value
-   * @returns {Document} Resolves to array of documents.
+   * @description Fetch a single document by a specific field and value
+   * @param {string} field - Field to query by
+   * @param {any} value - Value of the field to match
+   * @returns {Document} Matching document
    */
   async findByField(field, value) {
     try {
-      const documents = await this.model.findOne({ [field]: value }).exec();
-      return documents;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * @description Fetch documents by field
-   * @param {Object} options
-   * @param {any} value
-   * @returns {Document} Resolves to array of documents.
-   */
-  async findByMany(options) {
-    try {
-      const documents = await this.model.findOne(options).exec();
-      return documents;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * @description Fetch document by id
-   * @param {number} userId Document id
-   * @returns {Document} Resolves to found document.
-   */
-  async findById(userId) {
-    try {
-      const document = await this.model.findOne({ userId }).exec();
+      const document = await this.model.findOne({ [field]: value }).exec();
       return document;
     } catch (error) {
       throw error;
@@ -73,11 +43,39 @@ class BaseRepository {
   }
 
   /**
-   * @description Fetch all documents
-   * @param {object} query
-   * @returns {Document} Resolves to array of documents.
+   * @description Fetch multiple documents based on options
+   * @param {Object} options - Criteria to filter documents by
+   * @returns {Array<Document>} Array of matching documents
    */
-  async findAll(query) {
+  async findByMany(options) {
+    try {
+      const documents = await this.model.find(options).exec();
+      return documents;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @description Fetch a document by ID
+   * @param {string} id - Document ID
+   * @returns {Document} Found document
+   */
+  async findById(id) {
+    try {
+      const document = await this.model.findById(id).exec();
+      return document;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @description Fetch all documents that match the query
+   * @param {Object} query - Criteria for matching documents
+   * @returns {Array<Document>} Array of documents
+   */
+  async findAll(query = {}) {
     try {
       const documents = await this.model.find(query);
       return documents;
@@ -87,16 +85,37 @@ class BaseRepository {
   }
 
   /**
-   * @description Update a document by id
-   * @param {string} userId
-   * @param {any} options
+   * @description Update a document by ID
+   * @param {string} id - Document ID
+   * @param {Object} updateOptions - Fields to update
+   * @returns {Document} Updated document
+   */
+  async updateById(id, updateOptions) {
+    try {
+      const document = await this.model
+        .findByIdAndUpdate(id, updateOptions, {
+          new: true,
+        })
+        .exec();
+      return document;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @description Update a document by user ID
+   * @param {string} userId - User ID
+   * @param {Object} options - Fields to update
    * @returns {Document} Updated document
    */
   async update(userId, options) {
     try {
-      const document = await this.model.findOneAndUpdate({ userId }, options, {
-        new: true,
-      });
+      const document = await this.model
+        .findOneAndUpdate({ userId }, options, {
+          new: true,
+        })
+        .exec();
       return document;
     } catch (error) {
       throw error;
@@ -104,18 +123,35 @@ class BaseRepository {
   }
 
   /**
-   * @description increment a single value, serves for rewards e.t.c
-   * @param {string} userId
-   * @param {number} amountBy the amount to increment the value by
+   * @description Delete a document by ID
+   * @param {string} id - Document ID
+   * @returns {Document} Deleted document
+   */
+  async deleteById(id) {
+    try {
+      const document = await this.model.findByIdAndDelete(id).exec();
+      return document;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * @description Increment a field value for a specific document
+   * @param {string} userId - User ID
+   * @param {string} field - Field to increment
+   * @param {number} amountBy - Amount to increment by
    * @returns {Document} Updated document
    */
   async increment(userId, field, amountBy) {
     try {
-      const document = await this.model.findOneAndUpdate(
-        { userId },
-        { $inc: { [field]: amountBy } },
-        { new: true }
-      );
+      const document = await this.model
+        .findOneAndUpdate(
+          { userId },
+          { $inc: { [field]: amountBy } },
+          { new: true }
+        )
+        .exec();
       return document;
     } catch (error) {
       throw error;
@@ -123,21 +159,17 @@ class BaseRepository {
   }
 
   /**
-   * @description Updates a document by id
-   * @param {object} query
-   * @param {object} field
-   * @param {any} value
-   * @param {object} secondField
-   * @param {any} secondValue
+   * @description Insert or update a single field value for a specific document
+   * @param {Object} query - Criteria to match document
+   * @param {string} field - Field to update
+   * @param {any} value - New value of the field
    * @returns {Document} Updated document
    */
   async singleInsert(query, field, value) {
     try {
-      const document = await this.model.findOneAndUpdate(
-        query,
-        { $set: { [field]: value } },
-        { new: true }
-      );
+      const document = await this.model
+        .findOneAndUpdate(query, { $set: { [field]: value } }, { new: true })
+        .exec();
       return document;
     } catch (error) {
       throw error;
@@ -145,18 +177,21 @@ class BaseRepository {
   }
 
   /**
-   * @description reset a  value, serves e.t.c
-   * @param {string} userId
-   * @param {number} value By the amount to reset the value to 0 or any value
+   * @description Reset a field value for a specific document
+   * @param {string} userId - User ID
+   * @param {string} field - Field to reset
+   * @param {any} value - Value to reset the field to (default is 0)
    * @returns {Document} Updated document
    */
-  async reset(userId, field, value) {
+  async reset(userId, field, value = 0) {
     try {
-      const document = await this.model.findOneAndUpdate(
-        { userId },
-        { $set: { [field]: value? value: 0 } },
-        { new: true }
-      );
+      const document = await this.model
+        .findOneAndUpdate(
+          { userId },
+          { $set: { [field]: value } },
+          { new: true }
+        )
+        .exec();
       return document;
     } catch (error) {
       throw error;
@@ -164,10 +199,10 @@ class BaseRepository {
   }
 
   /**
-   * @description Fetch documents based on a field and value
-   * @param {string} field
-   * @param {any} value
-   * @returns {Promise<Array>} - Array of documents
+   * @description Fetch all documents based on a specific field and value
+   * @param {string} field - Field to filter by
+   * @param {any} value - Value of the field
+   * @returns {Array<Document>} Array of matching documents
    */
   async findByFieldAll(field, value) {
     try {
@@ -179,27 +214,21 @@ class BaseRepository {
   }
 
   /**
-   * @description Fetch user card details (gemaScore, xHandle, walletAddress, walletUserName, rank, refillSpeed)
-   * @param {string} userId
-   * @param {Array} lookups
-   * @param {Object} projection
-   * @returns {Object} User card details
+   * @description Execute an aggregation query based on user ID
+   * @param {string} field - Field to match for aggregation
+   * @param {any} value - Value of the field
+   * @param {Array} lookups - Additional lookup stages for aggregation
+   * @param {Object} projection - Fields to include in projection
+   * @returns {Object|null} Result of aggregation or null if no match
    */
   async aggregationQueryByUserId(field, value, lookups = [], projection = {}) {
     try {
-      // Create the initial aggregation pipeline with $match
       const pipeline = [
-        {
-          // $match: { _id: new mongoose.Types.ObjectId(userId) }
-          $match: { [field]: value },
-        },
-        ...lookups, // passed from specific repositories
-        {
-          $project: projection, //passed from specific repositories
-        },
+        { $match: { [field]: value } },
+        ...lookups,
+        { $project: projection },
       ];
 
-      // Perform the aggregation
       const result = await this.model.aggregate(pipeline);
       return result.length ? result[0] : null;
     } catch (error) {
