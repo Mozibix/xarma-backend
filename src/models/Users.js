@@ -17,6 +17,7 @@ const UserSchema = new Schema(
       index: true,
     },
     username: { type: String, required: true },
+    defaultLanguage: { type: String, required: false },
     xHandle: { type: String, required: false },
     tgUsername: { type: String, required: true, index: true },
     tgData: {
