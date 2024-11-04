@@ -25,4 +25,39 @@ const validateTonWalletAddress = (tonWalletAddress) => {
   };
 };
 
-export { validateTwitterUsername, validateTonWalletAddress };
+const validateVaultData = (vaultData) => {
+  const errors = {};
+
+  if (validator.isEmpty(vaultData.valueName)) {
+    errors.valueName = "Vault name is required";
+  }
+
+  if (!validator.isURL(vaultData.imageUrl)) {
+    errors.imageUrl = "A valid URL is required for the image";
+  }
+
+  if (typeof vaultData.suspend !== "boolean") {
+    errors.suspend = "Suspend must be a boolean value";
+  }
+
+  if (
+    !Array.isArray(vaultData.achievements) ||
+    vaultData.achievements.length === 0
+  ) {
+    errors.achievements = "At least one achievement is required";
+  }
+
+  if (!Array.isArray(vaultData.requirements)) {
+    errors.requirements = "Requirements must be an array";
+  }
+
+  if (vaultData.metadata && typeof vaultData.metadata !== "object") {
+    errors.metadata = "Metadata must be an object";
+  }
+
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+};
+export { validateTwitterUsername, validateTonWalletAddress, validateVaultData };

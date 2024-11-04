@@ -40,7 +40,7 @@ function apiRequest(endpoint, method = "GET", body = null) {
 async function addVault() {
   const vaultData = {
     valueName: "Test Vault",
-    valueImageUrl: "http://example.com/vault-image.jpg",
+    imageUrl: "http://example.com/vault-image.jpg",
     suspend: false,
     achievements: ["badge1", "badge2"],
     requirements: ["requirement1"],

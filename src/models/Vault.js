@@ -6,7 +6,7 @@ const VaultSchema = new Schema(
       type: String,
       required: true,
     },
-    valueImageUrl: {
+    imageUrl: {
       type: String,
       required: true,
     },
