@@ -13,7 +13,7 @@ class AnalyticsController {
     try {
       const {historyDate} = req.body // the date the data should be gotten from (eg 24hr ago.)
       const {user} = req
-      const userId = user.userId
+      const userId = user._id
 
       const analyticsData = await AnalyticService.getAnalytics(userId, historyDate);
 
