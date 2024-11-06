@@ -4,9 +4,10 @@ import transactionRoutes from "./transactions.js";
 import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
 import rankRoutes from "./rank.js";
-import PensionRoutes from "./pension.js"
-import DailyClaimsRoutes from "./dailyClaims.js"
+import PensionRoutes from "./pension.js";
+import DailyClaimsRoutes from "./dailyClaims.js";
 import AnalyticRoutes from "./analytic.js";
+import vaultRoutes from "./vault.js";
 import DailyGemaRoutes from "./dailyGema.js"
 
 const router = Router();
@@ -35,5 +36,7 @@ router.use("/v1/analytic", AnalyticRoutes);
 router.use("/v1/daily", DailyClaimsRoutes);
 router.use("/v1/dailygema", DailyGemaRoutes);
 
+/* Vault Route */
+router.use("/v1/vaults", vaultRoutes);
 
 export default router;

@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build && node dist/bin/www.js",
-    "clean": "rm -rf dist",
+    "clean": "",
     "prebuild": "npm run clean",
     "build": "babel src -d dist",
     "dev": "nodemon --watch src --delay 250ms --exec babel-node src/bin/www.js --ignore tests/"
@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "body-parser": "^1.20.3",
     "cloudinary": "^2.4.0",

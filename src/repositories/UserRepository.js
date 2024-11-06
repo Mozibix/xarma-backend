@@ -71,6 +71,21 @@ class UsersRepository extends BaseRepository {
       projection
     );
   }
+
+  /**
+   * @description Update user profile by user ID
+   * @param {string} userId - ID of the user to update
+   * @param {Object} updateData - Data to update in the user profile
+   * @returns {Object|null} Updated user profile or null if no match
+   */
+  async updateUserProfile(userId, updateData) {
+    try {
+      const updatedUser = await super.update(userId, updateData);
+      return updatedUser;
+    } catch (error) {
+      throw new Error(`Error updating user profile: ${error.message}`);
+    }
+  }
 }
 
 export default UsersRepository;
