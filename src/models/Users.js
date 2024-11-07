@@ -22,7 +22,12 @@ const UserSchema = new Schema(
     tgData: {
       type: Object,
     },
-    tonWalletDetails: { type: Object, required: false },
+    tonWalletDetails: {
+      type: Schema.Types.ObjectId,
+      ref: "TonWallet",
+      unique: true,
+      required: true,
+    },
     rank: {
       type: String,
       enum: Object.values(userRanks),

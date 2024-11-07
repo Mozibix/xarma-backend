@@ -1,13 +1,14 @@
 import Mongoose, { Schema } from "mongoose";
-import valueType from "../enums/extractorType";
 
 const UrlBankSchema = new Schema(
   {
-    userId: {
+    og: {
       type: Schema.Types.ObjectId,
       ref: "Users",
-      unique: true,
-      required: true,
+    },
+    sniper: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
     },
     gemaScorePerUrl: {
       type: Number,
@@ -33,7 +34,7 @@ const UrlBankSchema = new Schema(
     },
     extractorType: {
       type: String,
-      enum: Object.values(valueType),
+      enum: Object.values({ OG: "og", SNIPER: "sniper" }),
     },
   },
   {

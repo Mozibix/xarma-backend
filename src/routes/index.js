@@ -3,6 +3,7 @@ import userRoutes from "./user.js";
 import transactionRoutes from "./transactions.js";
 import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
+import mineRoutes from "./mine.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/v1/auth", authRoutes);
 router.use("/v1/transactions", transactionRoutes);
 // Mount referral routes
 router.use("/v1/referrals", refRoutes);
-
+// Mount mine route
+router.use("/v1/mine", mineRoutes);
 export default router;

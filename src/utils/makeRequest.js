@@ -1,12 +1,6 @@
-import fetch from 'node-fetch'
+import fetch from "node-fetch";
 
-const makecall = async (
-  endpoint,
-  body = {},
-  headers = {},
-  reqType = "",
-  next
-) => {
+const makeRequest = async (endpoint, body = {}, headers = {}, reqType = "") => {
   try {
     const requestOptions = {
       method: reqType,
@@ -23,8 +17,8 @@ const makecall = async (
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    next(error);
+    throw error;
   }
 };
 
-module.exports = { makecall };
+export default makeRequest;
