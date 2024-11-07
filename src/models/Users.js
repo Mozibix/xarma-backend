@@ -17,6 +17,7 @@ const UserSchema = new Schema(
       index: true,
     },
     username: { type: String, required: true },
+    defaultLanguage: { type: String, required: false },
     xHandle: { type: String, required: false },
     tgUsername: { type: String, required: true, index: true },
     tgData: {
@@ -38,6 +39,7 @@ const UserSchema = new Schema(
     twitterDetails: { type: Object, required: false },
     inviteCode: { type: String, required: true, unique: true },
     avatar: { type: String, required: false },
+    isPensionActive: { type: Boolean, default: false },
   },
   { timestamps: { created_At: "created_At", updated_At: "updated_At" } }
 );

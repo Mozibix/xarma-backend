@@ -67,4 +67,22 @@ export default class UserService {
       throw error;
     }
   }
+
+  /**
+   * @description Update a user profile by userId
+   * @param {string} userId - User ID of the user to update
+   * @param {Object} updateOptions - Fields to update in the user profile
+   * @returns {Document} Updated user document
+   */
+  static async updateUserProfile(userId, updateOptions) {
+    try {
+      const updatedUser = userRepository.update(userId, updateOptions);
+      if (!updatedUser)
+        throw new Error("Unable to update profile; user not found");
+      return updatedUser;
+    } catch (error) {
+      Logger.logger.error(error);
+      throw error;
+    }
+  }
 }

@@ -11,7 +11,7 @@ const connectionUrl = config.NODE_ENV === 'test' ? config.MONGODB_URI : config.M
 mongoose.connect(connectionUrl).then(() => {
   console.log('Connected to database successfully');
 }).catch((err) => {
-  console.error('Database connection error:', err); 
+  console.error("Database connection error:", err);
 });
 
 app.listen(port, () => {

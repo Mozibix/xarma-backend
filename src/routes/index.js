@@ -3,7 +3,12 @@ import userRoutes from "./user.js";
 import transactionRoutes from "./transactions.js";
 import authRoutes from "./auth.js";
 import refRoutes from "./ref.js";
-import mineRoutes from "./mine.js";
+import rankRoutes from "./rank.js";
+import PensionRoutes from "./pension.js";
+import DailyClaimsRoutes from "./dailyClaims.js";
+import AnalyticRoutes from "./analytic.js";
+import vaultRoutes from "./vault.js";
+import DailyGemaRoutes from "./dailyGema.js"
 
 const router = Router();
 
@@ -21,6 +26,17 @@ router.use("/v1/auth", authRoutes);
 router.use("/v1/transactions", transactionRoutes);
 // Mount referral routes
 router.use("/v1/referrals", refRoutes);
-// Mount mine route
-router.use("/v1/mine", mineRoutes);
+// Mount rank routes
+router.use("/v1/rank", rankRoutes);
+
+router.use("/v1/pension", PensionRoutes);
+router.use("/v1/analytic", AnalyticRoutes);
+
+// mount daily claims routes
+router.use("/v1/daily", DailyClaimsRoutes);
+router.use("/v1/dailygema", DailyGemaRoutes);
+
+/* Vault Route */
+router.use("/v1/vaults", vaultRoutes);
+
 export default router;
