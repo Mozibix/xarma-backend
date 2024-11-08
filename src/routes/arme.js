@@ -6,11 +6,12 @@ const router = Router();
 
 router.post(
   "/purchase-incubate-xeet-card",
+  hasAuth,
   ArmeController.purchaseIncubateXeetCard
 );
 
-router.post("/generate-arme", ArmeController.generateArme);
+router.post("/generate-arme", hasAuth, ArmeController.generateArme);
 
-router.post("/extract-to-ton", ArmeController.extractToTon);
+router.post("/extract-to-ton", hasAuth, ArmeController.extractToTon);
 
 export default router;

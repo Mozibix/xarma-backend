@@ -28,71 +28,69 @@ class AuthController {
    */
   static async authenticateUser(req, res) {
     try {
-      // const queryParams = req.query;
+      const queryParams = req.query;
 
-      // const verify = await verifyTelegramRequest(queryParams);
-      // if (!verify) {
-      //   return res.status(403).json({
-      //     status: false,
-      //     error: "Could not validate telegram details",
-      //   });
-      // }
+      const verify = await verifyTelegramRequest(queryParams);
+      if (!verify) {
+        return res.status(403).json({
+          status: false,
+          error: "Could not validate telegram details",
+        });
+      }
 
-      // const telegramUser = JSON.parse(queryParams.user);
+      const telegramUser = JSON.parse(queryParams.user);
 
-      // //Check for required parameters
-      // const requiredFields = ["id", "username", "first_name"];
+      //Check for required parameters
+      const requiredFields = ["id", "username", "first_name"];
 
-      // for (const field of requiredFields) {
-      //   if (!Object.keys(telegramUser).includes(field)) {
-      //     return res.status(403).json({
-      //       status: false,
-      //       error: `${field} data is required`,
-      //     });
-      //   }
-      // }
+      for (const field of requiredFields) {
+        if (!Object.keys(telegramUser).includes(field)) {
+          return res.status(403).json({
+            status: false,
+            error: `${field} data is required`,
+          });
+        }
+      }
 
-      // let user = await UserService.getAUser(telegramUser.id);
+      let user = await UserService.getAUser(telegramUser.id);
 
-      // if (!user) {
-      //   const userData = {
-      //     userId: randomUUID(),
-      //     tgId: telegramUser.id,
-      //     tgUsername: telegramUser.username,
-      //     username: telegramUser.first_name,
-      //     inviteCode: generateRandomAlphaNumeric(10),
-      //   };
-      //   user = await UserService.create(userData);
-      //   await gemaService.create(user._id);
-      //   await xeetService.create(user._id);
-      //   await dailyClaimsService.create(user._id);
+      if (!user) {
+        const userData = {
+          userId: randomUUID(),
+          tgId: telegramUser.id,
+          tgUsername: telegramUser.username,
+          username: telegramUser.first_name,
+          inviteCode: generateRandomAlphaNumeric(10),
+        };
+        user = await UserService.create(userData);
+        await gemaService.create(user._id);
+        await xeetService.create(user._id);
+        await dailyClaimsService.create(user._id);
 
-      //   //check if invite code was sent in query
-      //   if (telegramUser.inviteCode) {
-      //     //since no user was found, find the inviter by the inviteCode
-      //     let inviter = await UserService.findInviter(telegramUser.inviteCode);
+        //check if invite code was sent in query
+        if (telegramUser.inviteCode) {
+          //since no user was found, find the inviter by the inviteCode
+          let inviter = await UserService.findInviter(telegramUser.inviteCode);
 
-      //     if (inviter) {
-      //       //if inviter is found, reward the inviter
-      //       await gemaService.rewardGema(inviter._id, 1);
-      //       //update the referalSystem
-      //       await referralService.create(
-      //         user._id,
-      //         telegramUser.inviteCode,
-      //         inviter._id
-      //       );
-      //     }
-      //   }
-      // }
-      const token = createToken("672d9ae212ad1dd35982c087");
-
+          if (inviter) {
+            //if inviter is found, reward the inviter
+            await gemaService.rewardGema(inviter._id, 1);
+            //update the referalSystem
+            await referralService.create(
+              user._id,
+              telegramUser.inviteCode,
+              inviter._id
+            );
+          }
+        }
+      }
+      const token = createToken(user._id);
       return res.status(200).json({
         message: "User authenticated successfully.",
-        // user,
+        user,
         token,
       });
     } catch (error) {
-      console.log(error, "error");
       Logger.logger.error(error.data);
       return res.status(500).json({
         status: false,
