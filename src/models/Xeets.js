@@ -9,18 +9,18 @@ const XeetSchema = new Schema(
       required: true,
     },
     xeetScore: {
-      type: Number,
+      type: Schema.Types.Decimal128,
       default: 0,
     },
     numberOfImpressionPerAccount: {
-      type: Number,
+      type: Schema.Types.Decimal128,
       default: 0,
     },
   },
   {
     timestamps: {
-      created_At: "created_At",
-      updated_At: "updated_At",
+      createdAt: "created_At",
+      updatedAt: "updated_At",
     },
   }
 );
