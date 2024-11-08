@@ -1,5 +1,6 @@
 import Mongoose, { Schema } from "mongoose";
 import userRanks from "../enums/userRanks.js";
+import processStates from "../enums/processStates.js";
 
 const UserSchema = new Schema(
   {
@@ -23,12 +24,21 @@ const UserSchema = new Schema(
     tgData: {
       type: Object,
     },
-    tonWalletDetails: { type: Object, required: false },
+    tonWalletDetails: {
+      type: Object,
+      required: false,
+      default: { balance: 0 },
+    },
     rank: {
       type: String,
       enum: Object.values(userRanks),
       default: userRanks.OBSERVER,
       required: false,
+    },
+    processState: {
+      type: String,
+      enum: Object.values(processStates),
+      default: processStates.NONE,
     },
     isTwitterActive: { type: Boolean, required: false },
     twitterDetails: { type: Object, required: false },
