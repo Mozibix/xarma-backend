@@ -8,7 +8,9 @@ import PensionRoutes from "./pension.js";
 import DailyClaimsRoutes from "./dailyClaims.js";
 import AnalyticRoutes from "./analytic.js";
 import vaultRoutes from "./vault.js";
-import DailyGemaRoutes from "./dailyGema.js"
+import xeetRoutes from "./xeet.js";
+import armeRoutes from "./arme.js";
+import DailyGemaRoutes from "./dailyGema.js";
 
 const router = Router();
 
@@ -38,5 +40,11 @@ router.use("/v1/dailygema", DailyGemaRoutes);
 
 /* Vault Route */
 router.use("/v1/vaults", vaultRoutes);
+
+/* Xeet Route */
+router.use("/v1/xeets", xeetRoutes);
+
+/* Claim $Arme Route */
+router.use("/v1/arme", armeRoutes);
 
 export default router;
