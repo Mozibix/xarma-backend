@@ -7,7 +7,7 @@ const router = Router();
 const { authenticateUser, linkTwitter, linkTonWallet } = AuthController;
 
 // Define user-related routes
-router.post("/authentiate", authenticateUser);
+router.post("/authenticate", authenticateUser);
 router.post("/link-twitter", hasAuth, linkTwitter);
 router.post("/link-ton-wallet", hasAuth, linkTonWallet);
 
