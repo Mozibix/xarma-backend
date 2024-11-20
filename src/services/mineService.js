@@ -66,59 +66,38 @@ export default class {
   /**
    *
    * @param {string} url
-   * @param {boolean} god_extractor
    */
-  static async mine(url, god_extractor) {
-    try {
-      //check if the url was sent to this body
-      if (!url) {
-        throw new Error("The url is needed");
-      }
-      //check if user has submitted their twitter link
-      if (!req.user.xHandle) {
-        throw new Error("User need to submit their X handle to proceed");
-      }
+  static async UrlApiCall(url) {
+    const xtweetIdMatch = url.match(/status\/(\d+)/);
+    const tweetId = xtweetIdMatch ? xtweetIdMatch[1] : null;
+    if (!tweetId) throw new Error("Invalid tweet URL");
 
-      //check for connected ton wallet
-      if (!req.user.tonWalletDetails) {
-        throw new Error("User need to submit their X handle to proceed");
-      }
+    const endpoint = `https://api.x.com/2/tweets/${tweetId}`;
+    const queryParams = new URLSearchParams({
+      "tweet.fields": "public_metrics,created_at,organic_metrics",
+      expansions: "author_id",
+      "user.fields": "username",
+    }).toString();
 
-      //check if they have mined for today
+    const headers = {
+      Host: "api.x.com",
+      "User-Agent": "My Twitter App v1.0.23",
+      Authorization: `Bearer ${process.env.TWITTER_BEARER}`,
+    };
 
-      //Api Call to twitter
-      const xtweetIdMaytch = url.match(/status\/(\d+)/);
-      const tweetId = xtweetIdMaytch ? xtweetIdMaytch[1] : null;
+    const response = await makeRequest(
+      `${endpoint}?${queryParams}`,
+      {},
+      headers,
+      "GET"
+    );
+    if (!response) throw new Error("Error fetching data from Twitter API");
 
-      if (!tweetId) {
-        return res
-          .status(400)
-          .json({ status: false, message: "Invalid tweet URL" });
-      }
-
-      //call api and return certain info
-      const endpoint = `https://api.x.com/2/tweets/${tweetId}`;
-      const reqParams = {
-        "tweet.fields": "public_metrics,created_at,organic_metrics",
-        expansions: "author_id",
-        "user.fields": "username",
-      };
-      const queryParams = new URLSearchParams(reqParams).toString();
-      const headers = {
-        Host: "api.x.com",
-        "User-Agent": "My Twitter App v1.0.23",
-        Authorization: `Bearer ${process.env.TWITTER_BEARER}`,
-      };
-      const checkUrl = await makeRequest(
-        `${endpoint}${queryParams}`,
-        {},
-        headers,
-        "GET"
-      );
-    } catch (error) {
-      Logger.logger.error(error.data);
-      throw error;
-    }
+    return {
+      impressions: response.public_metrics.impression_count,
+      likes: response.public_metrics.like_count,
+      handle: response.author_id,
+    };
   }
 
   /**
