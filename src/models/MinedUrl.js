@@ -1,13 +1,14 @@
 import Mongoose, { Schema } from "mongoose";
-import valueType from "../enums/extractorType";
 
-const UrlBankSchema = new Schema(
+const MinedUrlSchema = new Schema(
   {
-    userId: {
+    og_user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
-      unique: true,
-      required: true,
+    },
+    sniper_user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
     },
     gemaScorePerUrl: {
       type: Number,
@@ -31,9 +32,13 @@ const UrlBankSchema = new Schema(
     url: {
       type: String,
     },
+    is_complete: {
+      type: Boolean,
+      default: false,
+    },
     extractorType: {
       type: String,
-      enum: Object.values(valueType),
+      enum: Object.values({ OG: "og", SNIPER: "sniper" }),
     },
   },
   {
@@ -44,6 +49,6 @@ const UrlBankSchema = new Schema(
   }
 );
 
-const UrlBank = Mongoose.model("UrlBank", UrlBankSchema);
+const MinedUrl = Mongoose.model("UrlBank", MinedUrlSchema);
 
-export default UrlBank;
+export default MinedUrl;
