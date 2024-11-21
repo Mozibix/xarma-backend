@@ -31,16 +31,6 @@ class AuthController {
       const queryParams = req.query;
 
       // const verify = await verifyTelegramRequest(queryParams);
-<<<<<<< HEAD
-      // if (!verify) {
-      //   return res.status(403).json({
-      //     status: false,
-      //     error: "Could not validate telegram details",
-      //   });
-      // }
-
-      const verify = true;
-=======
       const verify = true;
       if (!verify) {
         return res.status(403).json({
@@ -48,7 +38,6 @@ class AuthController {
           error: "Could not validate telegram details",
         });
       }
->>>>>>> 4038d1ad70f323c46bb01f45e5d12515474686cd
 
       const telegramUser = JSON.parse(queryParams.user);
 
