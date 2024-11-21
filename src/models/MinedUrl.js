@@ -1,12 +1,12 @@
 import Mongoose, { Schema } from "mongoose";
 
-const UrlBankSchema = new Schema(
+const MinedUrlSchema = new Schema(
   {
-    og: {
+    og_user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
     },
-    sniper: {
+    sniper_user: {
       type: Schema.Types.ObjectId,
       ref: "Users",
     },
@@ -32,6 +32,10 @@ const UrlBankSchema = new Schema(
     url: {
       type: String,
     },
+    is_complete: {
+      type: Boolean,
+      default: false,
+    },
     extractorType: {
       type: String,
       enum: Object.values({ OG: "og", SNIPER: "sniper" }),
@@ -45,6 +49,6 @@ const UrlBankSchema = new Schema(
   }
 );
 
-const UrlBank = Mongoose.model("UrlBank", UrlBankSchema);
+const MinedUrl = Mongoose.model("UrlBank", MinedUrlSchema);
 
-export default UrlBank;
+export default MinedUrl;

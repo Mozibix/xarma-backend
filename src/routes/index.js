@@ -8,7 +8,8 @@ import PensionRoutes from "./pension.js";
 import DailyClaimsRoutes from "./dailyClaims.js";
 import AnalyticRoutes from "./analytic.js";
 import vaultRoutes from "./vault.js";
-import DailyGemaRoutes from "./dailyGema.js"
+import DailyGemaRoutes from "./dailyGema.js";
+import MineRoutes from "./mine.js";
 
 const router = Router();
 
@@ -38,5 +39,8 @@ router.use("/v1/dailygema", DailyGemaRoutes);
 
 /* Vault Route */
 router.use("/v1/vaults", vaultRoutes);
+
+/* Mounting minning route */
+router.use("/v1/mine", MineRoutes);
 
 export default router;

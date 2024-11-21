@@ -1,19 +1,19 @@
-import UrlBank from "../models/UrlBank.js";
+import MinedUrl from "../models/MinedUrl.js";
 import BaseRepository from "./BaseRepository.js";
 
 /**
  * @description BaseRepository
  * @class UrlbankRepository
  */
-class UrlbankRepository extends BaseRepository {
+class MinedUrlRepository extends BaseRepository {
   /**
    * @description create a new document
    * @param {string} model
    * @returns {document} returns a newly created document
    */
   constructor() {
-    super(UrlBank);
+    super(MinedUrl);
   }
 }
 
-export default UrlbankRepository;
+export default MinedUrlRepository;

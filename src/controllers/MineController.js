@@ -13,14 +13,32 @@ class MineController {
   static async MineUrl(req, res) {
     try {
       const { url, god_extractor } = req.body;
+
       const user = req.user;
-      if (!url || !user.xHandle || !user.tonWalletDetails) {
+
+      if (!url) {
         return res
           .status(400)
-          .json({ status: false, message: "Required fields missing" });
+          .json({ status: false, message: "Mine url must be provided" });
       }
 
+      if (!user.xHandle) {
+        return res
+          .status(400)
+          .json({ status: false, message: "User should connect X to proceed" });
+      }
+
+      if (!user.tonWalletDetails) {
+        return res.status(400).json({
+          status: false,
+          message: "User should connect ton wallet to continue",
+        });
+      }
+
+      //check for mine limits and account restrictions
+
       const { impressions, likes, handle } = await mineService.UrlApiCall(url);
+      console.log(handle, "checking the handle");
       const checkOwner = await UserService.getAUser("xHandle", handle);
       const checkIfUrlMinedAlready = await mineService.checkIfUrlMined(url);
 

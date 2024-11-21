@@ -1,7 +1,6 @@
-import ReferralRepository from "../repositories/ReferralRepository.js";
-import UrlbankRepository from "../repositories/UrlbankRepository.js";
+import MinedUrlRepository from "../repositories/MinedUrlRepository.js";
 
-const urlbankRepository = new UrlbankRepository();
+const minedUrlRepository = new MinedUrlRepository();
 /**
  * @description helper
  * @class referralService
@@ -14,7 +13,7 @@ export default class {
    */
   static async getParticularMined(particular_id) {
     try {
-      const particular = await urlbankRepository.findById(particular_id);
+      const particular = await minedUrlRepository.findById(particular_id);
       return particular;
     } catch (error) {
       throw error;
@@ -28,7 +27,7 @@ export default class {
    */
   static async getAllMinedUrls(user_id) {
     try {
-      const totalMined = await urlbankRepository.findByFieldAll(user_id);
+      const totalMined = await minedUrlRepository.findByFieldAll(user_id);
       return totalMined;
     } catch (error) {
       throw error;
@@ -42,7 +41,7 @@ export default class {
    */
   static async checkIfUrlMined(url) {
     try {
-      const alreadyMined = await urlbankRepository.findByField("url", url);
+      const alreadyMined = await minedUrlRepository.findByField("url", url);
       return alreadyMined;
     } catch (error) {
       throw error;
@@ -56,7 +55,7 @@ export default class {
    */
   static async updateOgAfterSnipping(urlBank_id, options) {
     try {
-      const add = await urlbankRepository.update(urlBank_id, options);
+      const add = await minedUrlRepository.update(urlBank_id, options);
       return add;
     } catch (error) {
       throw error;
@@ -91,6 +90,7 @@ export default class {
       headers,
       "GET"
     );
+    console.log(response, "the response from the twitter api");
     if (!response) throw new Error("Error fetching data from Twitter API");
 
     return {
@@ -138,16 +138,16 @@ export default class {
 
       // Include `og` if it is provided
       if (og != undefined) {
-        newUrlbankData.og = og;
+        newUrlbankData.og_user = og;
       }
 
       // Include `snipper` if it is provided
       if (snipper != undefined) {
-        newUrlbankData.snipper = snipper;
+        newUrlbankData.sniper_user = snipper;
       }
 
       // Create the new URL bank document
-      const newUrlbank = await urlbankRepository.create(newUrlbankData);
+      const newUrlbank = await minedUrlRepository.create(newUrlbankData);
       return newUrlbank;
     } catch (error) {
       throw error;
