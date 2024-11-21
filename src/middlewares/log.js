@@ -10,6 +10,11 @@ export default class Logger {
       new transports.File({
         filename: "logs/error.log",
         level: "error",
+        format: format.combine(
+          format.timestamp(),
+          format.errors({ stack: true }),
+          format.json()
+        ),
       }),
       new transports.File({ filename: "logs/combined.log" }),
     ],

@@ -14,6 +14,9 @@ const config = {
   NODE_ENV: process.env.NODE_ENV || "development",
   Endpoint: process.env.Endpoint || "/v1",
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+  TWITTER_BEARER_TOKEN: process.env.TWITTER_BEARER,
+  TWITTER_ACCESS_TOKEN: process.env.TWITTER_ACCESS,
+  TWITTER_ACCESS_TOKEN_SECRET: process.env.TWITTER_ACCESS_SECRET,
 };
 
 export default config;

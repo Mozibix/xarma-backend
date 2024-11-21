@@ -25,9 +25,10 @@ const UserSchema = new Schema(
       type: Object,
     },
     tonWalletDetails: {
-      type: Object,
-      required: false,
-      default: { balance: 0 },
+      type: Schema.Types.ObjectId,
+      ref: "TonWallet",
+      unique: true,
+      required: true,
     },
     rank: {
       type: String,

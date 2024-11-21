@@ -53,7 +53,7 @@ class AuthController {
         }
       }
 
-      let user = await UserService.getAUser(telegramUser.id);
+      let user = await UserService.getAUser("tgId", telegramUser.id);
 
       if (!user) {
         const userData = {
@@ -92,6 +92,7 @@ class AuthController {
         token,
       });
     } catch (error) {
+      console.log(error, "error oooo");
       Logger.logger.error(error.data);
       return res.status(500).json({
         status: false,

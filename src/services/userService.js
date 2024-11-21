@@ -31,10 +31,10 @@ export default class UserService {
    * @param {option} option
    * @returns {document} returns a user document
    */
-  static async getAUser(tgId) {
+  static async getAUser(field, searchBy) {
     try {
       // const { tgId } = option;
-      const user = userRepository.findByField("tgId", tgId);
+      const user = userRepository.findByField(field, searchBy);
       if (!user) throw new Error("This user does not exist");
       return user;
     } catch (error) {

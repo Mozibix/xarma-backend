@@ -9,22 +9,26 @@ import rankService from "../services/rankService.js";
  */
 class UserController {
   /**
-     * @description get a user details
-     * @param  {object} req
-     * @param {object} res
-     * @returns {object} a json object
-     * @memberof UserController
-     */
+   * @description get a user details
+   * @param  {object} req
+   * @param {object} res
+   * @returns {object} a json object
+   * @memberof UserController
+   */
   static async getUserDetails(req, res) {
     try {
       const user = req.user;
       const filterUserData = _.pick(user.toObject(), userDetail());
-      return response(res, 200, { status: true, message: "User details retrieved successfully", data: filterUserData });
+      return response(res, 200, {
+        status: true,
+        message: "User details retrieved successfully",
+        data: filterUserData,
+      });
     } catch (error) {
-      return response(res, 500, { 
+      return response(res, 500, {
         status: false,
-        message: "A server error occured"
-      })
+        message: "A server error occured",
+      });
     }
   }
 
@@ -34,18 +38,22 @@ class UserController {
       let gemaScore = await gemaService.getGemaScore(user._id);
       let xeetScore = await xeetService.getXeetScore(user._id);
       const scores = {
-        'gema': gemaScore.gemaScore,
-        'xeet': {
-          'score': xeetScore.xeetScore,
-          'numberOfImpressionPerAccount': xeetScore.numberOfImpressionPerAccount
-        }
-      }
-      return response(res, 200, { status: true, message: "User Scores Retrieved Successfully", data: scores });
+        gema: gemaScore.gemaScore,
+        xeet: {
+          score: xeetScore.xeetScore,
+          numberOfImpressionPerAccount: xeetScore.numberOfImpressionPerAccount,
+        },
+      };
+      return response(res, 200, {
+        status: true,
+        message: "User Scores Retrieved Successfully",
+        data: scores,
+      });
     } catch (error) {
-      return response(res, 500, { 
+      return response(res, 500, {
         status: false,
-        message: "A server error occured"
-      })
+        message: "A server error occured",
+      });
     }
   }
 
@@ -61,8 +69,8 @@ class UserController {
       const userId = req.query.userId; // Depends on frontend
       const cardDettails = await UserService.getUserCardDetails(userId);
       return res.status(200).json({
-        message: 'Successfully retrieved',
-        data: cardDettails
+        message: "Successfully retrieved",
+        data: cardDettails,
       });
     } catch (error) {
       return res.status(400).json({
@@ -72,9 +80,7 @@ class UserController {
       });
     }
   }
-  // 
-
-
+  //
 }
 
-export default UserController
+export default UserController;
