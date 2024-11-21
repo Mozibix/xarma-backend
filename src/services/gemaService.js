@@ -1,3 +1,4 @@
+import Logger from "../middlewares/log.js";
 import GemaRepository from "../repositories/gemaRepository.js";
 
 const gemaRepository = new GemaRepository();
@@ -20,7 +21,7 @@ export default class {
       if (!gemaScore) throw new Error("This data does not exist");
       return gemaScore;
     } catch (error) {
-      logger.error(error.data);
+      Logger.logger.error(error.data);
       throw error;
     }
   }
@@ -31,7 +32,7 @@ export default class {
         userId: user_id,
       });
     } catch (error) {
-      logger.error(error.data);
+      Logger.logger.error(error.data);
       throw error;
     }
   }

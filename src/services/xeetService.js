@@ -6,6 +6,7 @@ const xeetRepository = new XeetRepository();
  * @class helper
  */
 export default class {
+
   static async rewardXeet(user_id, amount) {
     try {
       // gemaRepository.increment(user_id, "gemaScore", amount);
@@ -28,6 +29,7 @@ export default class {
       throw error;
     }
   }
+
 
   static async create(user_id) {
     try {

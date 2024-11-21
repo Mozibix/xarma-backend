@@ -11,6 +11,7 @@ import vaultRoutes from "./vault.js";
 import DailyGemaRoutes from "./dailyGema.js";
 import MineRoutes from "./mine.js";
 
+
 const router = Router();
 
 // Base route for API
