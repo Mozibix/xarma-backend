@@ -1,6 +1,6 @@
 // represents the type of url claimer
 
-export default const valueType = {
+export const valueType = {
   OG: "OG",
   SNIPER: "sniper",
 };

@@ -12,6 +12,7 @@ const ReferalSchema = new Schema(
       type: String,
       unique: true,
     },
+
     referredBy: {
       type: Mongoose.Schema.Types.ObjectId,
       ref: "Users",
