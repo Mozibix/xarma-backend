@@ -96,7 +96,7 @@ class AuthController {
       Logger.logger.error(error.data);
       return res.status(500).json({
         status: false,
-        error: "A server error occured. Please try again later",
+        error: error,
       });
     }
   }
