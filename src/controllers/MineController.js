@@ -59,6 +59,7 @@ class MineController {
     }
   }
 
+  //small change
   static async MineHistory(req, res) {
     try {
       const value = await mineService.getAllMinedUrls(req.user._id);
