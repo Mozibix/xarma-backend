@@ -3,6 +3,7 @@ import { userDetail } from "../utils/apiFilter.js";
 import gemaService from "../services/gemaService.js";
 import xeetService from "../services/xeetService.js";
 import rankService from "../services/rankService.js";
+import UserService from "../services/userService.js";
 
 /**
  * @description UserController
@@ -81,6 +82,36 @@ class UserController {
     }
   }
   //
+
+  static async getUserAllDetails(req, res) {
+    try {
+      const id = req.query.id;
+
+      console.log(id, "id");
+
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          errorCode: 122,
+          message: "User ID is required",
+        });
+      }
+
+      const userDetails = await UserService.getUserAllDetails(id);
+
+      return res.status(200).json({
+        success: true,
+        message: "Successfully retrieved",
+        data: userDetails,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        errorCode: 121,
+        message: error.message,
+      });
+    }
+  }
 }
 
 export default UserController;

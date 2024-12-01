@@ -85,4 +85,35 @@ export default class UserService {
       throw error;
     }
   }
+
+  static async getUserCardDetails(userId) {
+    try {
+      const cardDetails = await userRepository.getUserCardDetails(userId);
+
+      if (!cardDetails) throw new Error("User card details not found");
+
+      return cardDetails;
+    } catch (error) {
+      Logger.logger.error(error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * @description Get user card details by userId
+   * @param {string} id
+   * @returns {Object} returns User card details
+   */
+  static async getUserAllDetails(id) {
+    try {
+      const userDetails = await userRepository.getUserAllDetails(id);
+
+      if (!userDetails) throw new Error("User card details not found");
+
+      return userDetails;
+    } catch (error) {
+      Logger.logger.error(error.message);
+      throw error;
+    }
+  }
 }

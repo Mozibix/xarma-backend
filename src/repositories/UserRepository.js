@@ -1,5 +1,11 @@
 import BaseRepository from "./BaseRepository.js";
 import Users from "../../src/models/Users.js";
+import GemaScores from "../models/Gema.js";
+import TonWallet from "../models/TonWallet.js";
+import Ranks from "../models/Ranks.js";
+import mongoose from "mongoose";
+import XeetScores from "../models/Xeets.js";
+import DailyGemaClaim from "../models/DailyGemaClaims.js";
 
 /**
  * @description BaseRepository
@@ -84,6 +90,54 @@ class UsersRepository extends BaseRepository {
       return updatedUser;
     } catch (error) {
       throw new Error(`Error updating user profile: ${error.message}`);
+    }
+  }
+
+  /**
+   * @description Get user details by id
+   * @param {String} id - The user's ID
+   * @returns {Object} Returns user details
+   */
+  async getUserAllDetails(id) {
+    try {
+      console.log(id, "id coming in");
+      const isObjectId = mongoose.Types.ObjectId.isValid(id);
+
+      if (!isObjectId) {
+        throw new Error("Invalid ID format");
+      }
+
+      const objectId = new mongoose.Types.ObjectId(id);
+
+      const user = await Users.findOne({ _id: objectId }).lean();
+
+      if (!user) throw new Error("User not found");
+
+      const [
+        gemaScoreData,
+        walletData,
+        rankData,
+        XeetData,
+        dailyGemaClaimsData,
+      ] = await Promise.all([
+        GemaScores.find({ userId: objectId }).lean(),
+        TonWallet.find({ userId: objectId }).lean(),
+        Ranks.find({ userId: objectId }).lean(),
+        XeetScores.find({ userId: objectId }).lean(),
+        DailyGemaClaim.find({ userId: objectId }).lean(),
+      ]);
+
+      return {
+        user,
+        gemaScoreData,
+        walletData,
+        rankData,
+        XeetData,
+        dailyGemaClaimsData,
+      };
+    } catch (error) {
+      console.error("Error in getUserAllDetails:", error.message);
+      throw error;
     }
   }
 }
