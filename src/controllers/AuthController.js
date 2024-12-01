@@ -86,10 +86,14 @@ class AuthController {
         }
       }
       const token = createToken(user._id);
+
+      const userDetails = await UserService.getUserAllDetails(user._id);
+
       return res.status(200).json({
         message: "User authenticated successfully.",
         user,
         token,
+        userDetails,
       });
     } catch (error) {
       console.log(error, "error oooo");
