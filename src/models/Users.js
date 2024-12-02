@@ -28,7 +28,7 @@ const UserSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "TonWallet",
       unique: true,
-      required: true,
+      required: false,
     },
     rank: {
       type: String,
