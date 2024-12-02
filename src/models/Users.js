@@ -33,7 +33,7 @@ const UserSchema = new Schema(
     rank: {
       type: String,
       enum: Object.values(userRanks),
-      default: userRanks.OBSERVER,
+      default: userRanks.NORANK,
       required: false,
     },
     processState: {
