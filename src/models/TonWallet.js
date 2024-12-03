@@ -10,8 +10,8 @@ const TonWalletSchema = new Schema(
     },
     walletAddress: {
       type: String,
-      unique: true,
-      required: true,
+      unique: false,
+      required: false,
     },
     walletUserName: {
       type: String,
