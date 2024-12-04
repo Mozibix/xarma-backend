@@ -1,15 +1,11 @@
-
-
 import AnalyticRepository from "../repositories/AnalyticRepository.js";
 import AnalyticHistoryRepository from "../repositories/AnalyticHistoryRepository.js";
 import Logger from "../middlewares/log.js";
 import simplifyRatio from "../utils/ratio.js";
-import moment from 'moment';
+import moment from "moment";
 
 const analyticRepository = new AnalyticRepository();
 const analyticHistoryRepository = new AnalyticHistoryRepository();
-
-
 
 export default class AnalyticService {
   /**
@@ -20,7 +16,6 @@ export default class AnalyticService {
    */
   static async updateAnalytics(userId, fieldsToIncrement) {
     try {
-
       // Build the $inc object dynamically based on the fieldsToIncrement
       const incrementFields = {};
       for (const [field, amountBy] of Object.entries(fieldsToIncrement)) {
@@ -28,7 +23,10 @@ export default class AnalyticService {
       }
 
       // Update multiple fields by incrementing their values
-      const updatedAnalytics = await analyticRepository.incrementFields(userId, incrementFields);
+      const updatedAnalytics = await analyticRepository.incrementFields(
+        userId,
+        incrementFields
+      );
 
       // Save the current state into the AnalyticHistory collection
       const historyData = {
@@ -45,10 +43,10 @@ export default class AnalyticService {
         daysPensionSkipped: updatedAnalytics.daysPensionSkipped,
         xtractionPerDay: updatedAnalytics.xtractionPerDay,
         created_At: updatedAnalytics.updated_At,
-        terminationDate: moment().add(30, 'days').toDate(), // Set termination date to 30 days from now
+        terminationDate: moment().add(30, "days").toDate(), // Set termination date to 30 days from now
       };
 
-      await analyticHistoryRepository.create(historyData);  // Save the history
+      await analyticHistoryRepository.create(historyData); // Save the history
 
       return updatedAnalytics;
     } catch (error) {
@@ -61,19 +59,17 @@ export default class AnalyticService {
   static async deleteOldAnalyticsHistory() {
     try {
       await analyticHistoryRepository.model.deleteMany({
-        terminationDate: { $lte: new Date() },  // Delete documents whose terminationDate is in the past
+        terminationDate: { $lte: new Date() }, // Delete documents whose terminationDate is in the past
       });
-      console.log("Old analytics history deleted successfully.");
     } catch (error) {
       Logger.logger.error("Error deleting old analytics history:", error);
       console.error("Error deleting old analytics history:", error);
     }
-  };
-
+  }
 
   /**
-  * @description Reset daily analytics fields (todayGema, todayXeet, xtractionPerDay) to 0 at the end of the day
-  */
+   * @description Reset daily analytics fields (todayGema, todayXeet, xtractionPerDay) to 0 at the end of the day
+   */
   static async resetDailyAnalytics() {
     try {
       await analyticRepository.updateMany(
@@ -81,17 +77,14 @@ export default class AnalyticService {
         {
           todayGema: 0,
           todayXeet: 0,
-          xtractionPerDay: 0
+          xtractionPerDay: 0,
         }
       );
-      console.log("Daily analytics reset to 0 successfully.");
     } catch (error) {
       Logger.logger.error("Error resetting daily analytics:", error);
       throw error;
     }
   }
-
-
 
   /**
    * @description Get analytics data and additional information from other models using aggregation, with optional historical query
@@ -152,25 +145,36 @@ export default class AnalyticService {
         projection
       );
 
-      if (!analyticsData) throw new Error("No analytics data found for this user.");
+      if (!analyticsData)
+        throw new Error("No analytics data found for this user.");
 
       // If a historical date (historyDate) is provided, fetch the analytics state from 24 hours ago (or other specified time)
       if (historyDate) {
-        const history = await analyticHistoryRepository.model.findOne({
-          userId: userId,
-          created_At: { $lte: new Date(historyDate) },
-        })
+        const history = await analyticHistoryRepository.model
+          .findOne({
+            userId: userId,
+            created_At: { $lte: new Date(historyDate) },
+          })
           .sort({ created_At: -1 })
           .lean();
 
         // Calculate the differences (delta) for the specific fields
         delta = {
-          postsMinedAdded: analyticsData.totalPostMined - (history?.totalPostMined || 0),
-          gemaExtractedAdded: analyticsData.totalGemaExtracted - (history?.totalGemaExtracted || 0),
-          xeetExtractedAdded: analyticsData.totalXeetExtracted - (history?.totalXeetExtracted || 0),
-          linksSubmittedAdded: analyticsData.totalLinksSubmitted - (history?.totalLinksSubmitted || 0),
-          successfulMinesAdded: analyticsData.successfulMines - (history?.successfulMines || 0),
-          failedMinesAdded: analyticsData.failedMines - (history?.failedMines || 0),
+          postsMinedAdded:
+            analyticsData.totalPostMined - (history?.totalPostMined || 0),
+          gemaExtractedAdded:
+            analyticsData.totalGemaExtracted -
+            (history?.totalGemaExtracted || 0),
+          xeetExtractedAdded:
+            analyticsData.totalXeetExtracted -
+            (history?.totalXeetExtracted || 0),
+          linksSubmittedAdded:
+            analyticsData.totalLinksSubmitted -
+            (history?.totalLinksSubmitted || 0),
+          successfulMinesAdded:
+            analyticsData.successfulMines - (history?.successfulMines || 0),
+          failedMinesAdded:
+            analyticsData.failedMines - (history?.failedMines || 0),
         };
 
         const successfulMines = delta.successfulMinesAdded || 0;
@@ -179,13 +183,13 @@ export default class AnalyticService {
         let successPercentage = "N/A";
 
         if (totalMines > 0) {
-          successPercentage = ((successfulMines / totalMines) * 100).toFixed(2) + "%";
+          successPercentage =
+            ((successfulMines / totalMines) * 100).toFixed(2) + "%";
         } else {
           successPercentage = "0%";
         }
 
         delta.successPercentageAdded = successPercentage;
-
       }
 
       // ===== Add Ratios and Percentages =====
@@ -209,7 +213,8 @@ export default class AnalyticService {
       let successPercentage = "N/A";
 
       if (totalMines > 0) {
-        successPercentage = ((successfulMines / totalMines) * 100).toFixed(2) + "%";
+        successPercentage =
+          ((successfulMines / totalMines) * 100).toFixed(2) + "%";
       } else {
         successPercentage = "0%";
       }

@@ -21,7 +21,6 @@ cron.schedule("0 0 * * *", async () => {
     await PensionService.autoPensionContribution();
     await AnalyticService.deleteOldAnalyticsHistory();
     await AnalyticService.resetDailyAnalytics();
-    console.log("Daily pension contributions processed successfully.");
   } catch (error) {
     console.error(
       "Error in processing daily pension contributions:",

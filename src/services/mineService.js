@@ -90,7 +90,6 @@ export default class {
       headers,
       "GET"
     );
-    console.log(response, "the response from the twitter api");
     if (!response) throw new Error("Error fetching data from Twitter API");
 
     return {
@@ -133,8 +132,6 @@ export default class {
         url,
         extractorType,
       };
-
-      console.log(og, snipper);
 
       // Include `og` if it is provided
       if (og != undefined) {

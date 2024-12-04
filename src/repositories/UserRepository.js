@@ -100,7 +100,6 @@ class UsersRepository extends BaseRepository {
    */
   async getUserAllDetails(id) {
     try {
-      console.log(id, "id coming in");
       const isObjectId = mongoose.Types.ObjectId.isValid(id);
 
       if (!isObjectId) {

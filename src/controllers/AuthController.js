@@ -96,7 +96,6 @@ class AuthController {
         userDetails,
       });
     } catch (error) {
-      console.log(error, "error oooo");
       Logger.logger.error(error);
       return res.status(500).json({
         status: false,

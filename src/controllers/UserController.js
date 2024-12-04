@@ -2,7 +2,6 @@ import response from "../utils/response.js";
 import { userDetail } from "../utils/apiFilter.js";
 import gemaService from "../services/gemaService.js";
 import xeetService from "../services/xeetService.js";
-import rankService from "../services/rankService.js";
 import UserService from "../services/userService.js";
 
 /**
@@ -86,8 +85,6 @@ class UserController {
   static async getUserAllDetails(req, res) {
     try {
       const id = req.query.id;
-
-      console.log(id, "id");
 
       if (!id) {
         return res.status(400).json({

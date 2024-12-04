@@ -38,7 +38,6 @@ class MineController {
       //check for mine limits and account restrictions
 
       const { impressions, likes, handle } = await mineService.UrlApiCall(url);
-      console.log(handle, "checking the handle");
       const checkOwner = await UserService.getAUser("xHandle", handle);
       const checkIfUrlMinedAlready = await mineService.checkIfUrlMined(url);
 

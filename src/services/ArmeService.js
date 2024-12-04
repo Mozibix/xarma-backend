@@ -18,8 +18,6 @@ class ArmeService {
         throw new Error("Gema record not found for the user");
       }
 
-      console.log(user.processState, "process state");
-
       if (user.processState !== processStates.NONE) {
         throw new Error(
           "You must complete the current process before proceeding"
@@ -101,11 +99,9 @@ class ArmeService {
 
       gemaRecord.gemaScore -= 25;
       await gemaRecord.save();
-      console.log("Updated Gema score successfully for user:", userId);
 
       user.processState = processStates.EXTRACTION_TO_TON;
       await user.save();
-      console.log("Updated user process state for user:", userId);
 
       await this.scheduleGenerateArmeJob(user);
 
@@ -172,7 +168,6 @@ class ArmeService {
 
       gemaRecord.gemaScore -= 25;
       await gemaRecord.save();
-      console.log("Updated Gema score successfully for user:", userId);
 
       const xeetRecord = await XeetScores.findOne({ userId: user._id });
       if (!xeetRecord) {
@@ -211,13 +206,8 @@ class ArmeService {
 
             await updatedUser.save();
 
-            console.log(updatedUser, "updated user");
-            console.log("Ton wallet credited successfully for user:", userId);
-
             updatedUser.processState = processStates.NONE;
             await updatedUser.save();
-
-            console.log("Process state reset to NONE for user:", userId);
 
             task.stop();
           } catch (error) {
